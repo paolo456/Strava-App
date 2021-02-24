@@ -40,21 +40,28 @@ class Container extends React.Component {
 				access_token: access_token,
 				refresh_token: refresh_token
 			})
-			this.getActivites()
+			this.getActivites(null)
 		})
 	}
-	getActivites() {
+	getActivites(filterNumber) {
 		if (this.state.access_token !== '') {
-			const activities = 'https://www.strava.com/api/v3/athlete/activities?per_page=4&access_token='+this.state.access_token
-			axios.get(activities, {method: 'GET'}).then(results => {
+			let num = filterNumber !== null ? filterNumber : '4'
+			const URL = 'https://www.strava.com/api/v3/athlete/activities?per_page='+num+'&access_token='+this.state.access_token
+			if (this.state.activities.length > 0) {
+				this.setState({
+					activities: [],
+					imageURL: []
+				})
+			}
+			axios.get(URL, {method: 'GET'}).then(results => {
+				
 				this.setState({
 					activities: results.data
 				})
 				this.getMaps()
 			})
-		} 
+		}
 	}
-	
 	getMaps() {
 		this.state.activities.forEach(element => {
 			console.log(element)
@@ -182,7 +189,16 @@ class Container extends React.Component {
 		})
 		return (this.state.access_token ? <div className="container">
 			<div className="maps">
-				<div >{maps}</div>
+				<div>{maps}</div>
+			</div>
+			<div className='filter'>
+				<ul id="myUL">
+					<li><a onClick={() => this.getActivites('4')}>4 - Tiles</a></li>
+					<li><a onClick={() => this.getActivites('6')}>6 - Tiles</a></li>
+					<li><a onClick={() => this.getActivites('8')}>8 - Tiles</a></li>
+					<li><a onClick={() => this.getActivites('10')}>10 - Tiles</a></li>
+					<li><a onClick={() => this.getActivites('200')}>All Activities</a></li>
+				</ul>
 			</div>
 			<Chart width={500} height={500} 
 				data1={this.state.heartrate1}

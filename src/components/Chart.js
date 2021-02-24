@@ -87,7 +87,7 @@ export default class Chart extends React.Component{
 		  )
 	  }
 	  else
-	  	return <h1>Make a Selection Above</h1>
+	  	return <h1 className='loading-chart'>Make a Selection Above</h1>
 	  	
 	  
   }
