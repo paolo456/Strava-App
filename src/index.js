@@ -6,12 +6,10 @@ import { Line } from "react-chartjs-2";
 import Chart from './components/Chart'
 import reportWebVitals from './reportWebVitals';
 import $ from 'jquery'
+require('dotenv').config()
+console.log(process.env)
 
-
-const client_secret = '675faff1ca69ed58784ccaa816922d9a54c8e0ec'
-const refresh_token = 'f587298b18557240448f5dbd65ba79c81595dadb'
-const client_id = '61512'
-const callRefreshURL = 'https://www.strava.com/oauth/token?client_id='+client_id+'&client_secret='+client_secret+'&refresh_token='+refresh_token+'&grant_type=refresh_token'
+const callRefreshURL = 'https://www.strava.com/oauth/token?client_id='+process.env.REACT_APP_client_id+'&client_secret='+process.env.REACT_APP_client_secret+'&refresh_token='+process.env.REACT_APP_refresh_token+'&grant_type=refresh_token'
 
 class Container extends React.Component {
 	constructor(props) {
@@ -19,7 +17,6 @@ class Container extends React.Component {
 		this.reduceData = this.reduceData.bind(this)
 		this.state = {
 			access_token: {},
-			refresh_token: {},
 			activities: [],
 			imageURL: [],
 			selected: new Map(),
@@ -35,10 +32,8 @@ class Container extends React.Component {
 	componentDidMount() {
 		axios.post(callRefreshURL).then(results => {
 			let access_token = results.data.access_token
-			let refresh_token = results.data.refresh_token
 			this.setState({
 				access_token: access_token,
-				refresh_token: refresh_token
 			})
 			this.getActivites(null)
 		})
@@ -65,7 +60,7 @@ class Container extends React.Component {
 	getMaps() {
 		this.state.activities.forEach(element => {
 			console.log(element)
-			const map = 'https://maps.googleapis.com/maps/api/staticmap\?size=600x300&maptype=roadmap\&path=enc:'+element.map.summary_polyline+'\&key=AIzaSyBgqwajgRIEaLQ92J7ahUndHvd7NJYIDPY'
+			const map = 'https://maps.googleapis.com/maps/api/staticmap\?size=600x300&maptype=roadmap\&path=enc:'+element.map.summary_polyline+'\&key='+process.env.REACT_APP_MAPS_KEY
 			axios.get(map).then(results => {
 				console.log(results.request.responseURL)
 				let image = {id: element.id, url: results.request.responseURL,}
