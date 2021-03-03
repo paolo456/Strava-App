@@ -161,6 +161,15 @@ class Container extends React.Component {
 				distance1: []
 			})
 	}
+	clearAll() {
+		this.setState({
+			heartrate2: [],
+			distance2: [],
+			heartrate1: [],
+			distance1: []
+		})
+		
+	}
 	render() {
 		const maps = this.state.imageURL.map((activity) => {
 			return (
@@ -193,6 +202,7 @@ class Container extends React.Component {
 					<li><a onClick={() => this.getActivites('8')}>8 - Tiles</a></li>
 					<li><a onClick={() => this.getActivites('10')}>10 - Tiles</a></li>
 					<li><a onClick={() => this.getActivites('200')}>All Activities</a></li>
+					<li><a onClick={() => this.clearAll()}>Clear Selections</a></li>
 				</ul>
 			</div>
 			<Chart width={500} height={500} 
