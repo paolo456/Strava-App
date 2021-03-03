@@ -7,7 +7,6 @@ import Chart from './components/Chart'
 import reportWebVitals from './reportWebVitals';
 import $ from 'jquery'
 require('dotenv').config()
-console.log(process.env)
 
 const callRefreshURL = 'https://www.strava.com/oauth/token?client_id='+process.env.REACT_APP_client_id+'&client_secret='+process.env.REACT_APP_client_secret+'&refresh_token='+process.env.REACT_APP_refresh_token+'&grant_type=refresh_token'
 
@@ -62,7 +61,6 @@ class Container extends React.Component {
 			console.log(element)
 			const map = 'https://maps.googleapis.com/maps/api/staticmap\?size=600x300&maptype=roadmap\&path=enc:'+element.map.summary_polyline+'\&key='+process.env.REACT_APP_MAPS_KEY
 			axios.get(map).then(results => {
-				console.log(results.request.responseURL)
 				let image = {id: element.id, url: results.request.responseURL,}
 				this.setState({
 					imageURL: this.state.imageURL.concat(image),
@@ -168,7 +166,10 @@ class Container extends React.Component {
 			heartrate1: [],
 			distance1: []
 		})
-		
+		let selectedElements = document.querySelectorAll('.selected')
+		selectedElements.forEach(element => {
+			element.className = 'tile'
+		})
 	}
 	render() {
 		const maps = this.state.imageURL.map((activity) => {
